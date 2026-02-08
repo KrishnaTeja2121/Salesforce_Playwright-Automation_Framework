@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "CommonJS",
+    "types": ["node"],  // Include Node.js types
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "playwright.config.ts",  // Include the Playwright config file if it's a TypeScript file
+    "src/**/**/*"  // Include your source files if needed
+  ]
+}
