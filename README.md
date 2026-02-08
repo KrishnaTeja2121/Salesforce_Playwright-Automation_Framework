@@ -1,3 +1,8 @@
+![Playwright](https://img.shields.io/badge/Playwright-Test-green)
+![CI](https://img.shields.io/badge/CI-GitHub_Actions-blue)
+![Salesforce](https://img.shields.io/badge/Salesforce-Automation-blue)
+
+
 
 Salesforce QA Automation Framework
 
