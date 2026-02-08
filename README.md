@@ -10,11 +10,10 @@ Playwright + TypeScript | UI + API + E2E | CI/CD Ready
 
 🚀 Overview
 
-This repository demonstrates a production-grade Salesforce QA Automation framework designed for complex enterprise implementations across Sales Cloud, Service Cloud, and integrations.
+This repository demonstrates a production-grade Salesforce QA Automation framework designed for  enterprise implementations across Sales Cloud, Service Cloud, and integrations.
 
 The framework is built using Playwright with TypeScript and follows API-first, business-driven test automation principles, aligned with Salesforce release cycles, DevOps practices, and quality governance standards.
 
-This is not a demo project — it represents how automation is designed and executed in real Salesforce programs.
 
 🎯 Key Objectives
 
@@ -30,6 +29,7 @@ Act as a release quality gate, not just a reporting tool
 
 🧱 Architecture & Design Principles
 Test Pyramid (Salesforce-Optimized)
+
         End-to-End Business Flows
         (Few, High-Value Scenarios)
        ───────────────────────────
@@ -38,6 +38,9 @@ Test Pyramid (Salesforce-Optimized)
     ───────────────────────────────
      UI Automation (LWC)
     (Critical User Journeys Only)
+
+
+
 
 Core Principles
 
@@ -52,25 +55,7 @@ Security & data integrity validation across layers
 CI/CD-ready execution with clear quality gates
 
 🧪 Test Coverage
-Salesforce UI Automation (Playwright)
-
-Sales Cloud
-
-Lead creation & conversion
-
-Account & Opportunity validation
-
-Service Cloud
-
-Case workflows (extensible)
-
-Experience Cloud (extensible)
-
-Lightning Web Components (LWC)
-
-Salesforce Flows (validated via outcomes)
-
-Salesforce API & Integration Testing
+Salesforce UI Automation (Playwright), Sales Cloud, Lead creation & conversion, Lightning Web Components (LWC), Salesforce API & Integration Testing
 
 OAuth-based Salesforce authentication
 
@@ -95,60 +80,11 @@ Salesforce Flow → Auto-create Opportunity
 API → Validate Opportunity
 
 
-This approach validates real business processes, not just individual components.
-
-🔐 Security & Data Integrity Testing
-
-Profile-based access validation
-
-Object-level permissions (CRUD)
-
-Field-Level Security (FLS)
-
-Negative API tests for unauthorized access
-
-UI visibility checks for sensitive fields
-
-These tests help prevent data leakage and compliance risks.
-
 ⚙️ CI/CD & DevOps Integration
-Pipeline Strategy
+Pipeline Strategy, Pull Requests, Smoke tests only, GitHub Actions
 
-Pull Requests
+Playwright HTML reports with: Screenshots, Videos, Traces
 
-Smoke tests only
-
-Fast feedback to developers
-
-Main Branch / Nightly
-
-Full regression suite
-
-Business-critical flows validated
-
-Quality Gates
-
-Any smoke failure blocks PR
-
-Regression failures indicate release risk
-
-Tooling
-
-GitHub Actions
-
-Environment-based execution
-
-Secure secrets management
-
-Playwright HTML reports with:
-
-Screenshots
-
-Videos
-
-Traces
-
-Automation is treated as a release gate, not a passive report.
 
 📁 Project Structure
 salesforce-playwright-qa/
@@ -185,6 +121,8 @@ Improves stability and execution speed
 
 Enables seamless UI + API hybrid testing
 
+
+
 📊 Quality Governance
 
 Tracked and enforced through CI:
@@ -197,19 +135,7 @@ Flaky test detection (via retries + traces)
 
 Release confidence indicators
 
-The framework supports risk-based testing and continuous quality.
 
-🧠 Why This Framework Works for Salesforce
-
-Designed around Salesforce platform behavior
-
-Accounts for Lightning UI flakiness
-
-Uses SOQL as the source of truth
-
-Validates Flows, automation, and integrations
-
-Scales across multiple orgs and environments
 
 🏆 Who This Is For
 
@@ -224,27 +150,3 @@ Enterprise Salesforce programs with:
 Frequent releases
 
 Complex integrations
-
-Multiple user personas
-
-🚧 Future Enhancements (Optional)
-
-Accessibility testing (axe)
-
-Performance smoke checks via APIs
-
-Experience Cloud partner journeys
-
-Allure reporting integration
-
-✅ Final Note
-
-This repository represents how Salesforce QA automation is designed, implemented, and governed in real enterprise environments.
-
-It emphasizes:
-
-Business confidence over UI coverage
-
-Stability over volume
-
-Strategy over scripts
