@@ -86,25 +86,23 @@ Pipeline Strategy, Pull Requests, Smoke tests only, GitHub Actions
 Playwright HTML reports with: Screenshots, Videos, Traces
 
 
-📁 Project Structure
-salesforce-playwright-qa/
-│
-├── docs/                  # Test strategy & governance
-├── src/
-│   ├── core/              # Framework foundations
-│   ├── auth/              # Salesforce session handling
-│   ├── api/               # Salesforce REST & SOQL layer
-│   ├── ui/                # Page Objects (Salesforce Clouds)
-│   ├── flows/             # Business flow orchestration
-│   └── security/          # Profile & FLS validation
-│
-├── tests/
-│   ├── smoke/             # Release-entry tests
-│   ├── api/               # API regression
-│   ├── e2e/               # Business-critical flows
-│   └── security/          # Governance tests
-│
-└── .github/workflows/     # CI/CD pipelines
+## 📁 Project Structure
+
+- **docs/** — Test strategy & governance
+- **src/**
+  - **core/** — Framework foundations
+  - **auth/** — Salesforce session handling
+  - **api/** — Salesforce REST & SOQL layer
+  - **ui/** — Page Objects (Salesforce Clouds)
+  - **flows/** — Business flow orchestration
+  - **security/** — Profile & FLS validation
+- **tests/**
+  - **smoke/** — Release-entry tests
+  - **api/** — API regression
+  - **e2e/** — Business-critical flows
+  - **security/** — Governance tests
+- **.github/workflows/** — CI/CD pipelines
+
 
 
 This structure mirrors enterprise Salesforce programs, not toy projects.
