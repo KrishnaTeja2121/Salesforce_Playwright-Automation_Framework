@@ -48,6 +48,9 @@ jobs:
           SF_SECURITY_TOKEN: ${{ secrets.SF_SECURITY_TOKEN }}
           SF_CLIENT_ID: ${{ secrets.SF_CLIENT_ID }}
           SF_CLIENT_SECRET: ${{ secrets.SF_CLIENT_SECRET }}
+          SF_STD_USERNAME: ${{ secrets.SF_STD_USERNAME }}
+          SF_STD_PASSWORD: ${{ secrets.SF_STD_PASSWORD }}
+          SF_STD_TOKEN: ${{ secrets.SF_STD_TOKEN }}
 
       - name: Upload Playwright Report
         if: always()

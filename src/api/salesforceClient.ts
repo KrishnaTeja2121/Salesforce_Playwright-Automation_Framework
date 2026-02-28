@@ -30,6 +30,6 @@ export class SalesforceApiClient {
         return this.client.delete(`/sobjects/Lead/${id}`);
     }
     async query(soql:string){
-        return this.client.get(`/query?=${encodeURIComponent(soql)}`);
+        return this.client.get(`/query?q=${encodeURIComponent(soql)}`);
     }
 }

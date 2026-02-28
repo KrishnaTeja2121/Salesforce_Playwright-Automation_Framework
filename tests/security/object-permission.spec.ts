@@ -3,6 +3,13 @@ import axios from 'axios';
 import { users } from '../../src/security/userContext';
 
 test('Standard user cannot delete Lead', async () => {
+  test.skip(
+    !process.env.SF_STD_USERNAME ||
+      !process.env.SF_STD_PASSWORD ||
+      !process.env.SF_STD_TOKEN,
+    'Skipping: SF_STD_* credentials are not configured.'
+  );
+
   const tokenResponse = await axios.post(
     `${process.env.SF_BASE_URL}/services/oauth2/token`,
     new URLSearchParams({
