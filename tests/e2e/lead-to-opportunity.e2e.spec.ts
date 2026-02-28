@@ -12,10 +12,19 @@ test('Lead to Opportunity E2E flow', async({page})=>{
 
    // 3️⃣ API – Validate Opportunity
   await api.init();
-  const response = await api.query(
-    `SELECT Id, Name FROM Opportunity WHERE Lead__c='${leadId}'`
+  const leadResponse = await api.query(
+    `SELECT Id, IsConverted, ConvertedOpportunityId FROM Lead WHERE Id='${leadId}'`
   );
 
-  expect(response.data.records.length).toBeGreaterThan(0);
+  expect(leadResponse.data.records.length).toBe(1);
+  expect(leadResponse.data.records[0].IsConverted).toBe(true);
+
+  const opportunityId = leadResponse.data.records[0].ConvertedOpportunityId;
+  expect(opportunityId).toBeTruthy();
+
+  const opportunityResponse = await api.query(
+    `SELECT Id, Name FROM Opportunity WHERE Id='${opportunityId}'`
+  );
+  expect(opportunityResponse.data.records.length).toBe(1);
 
 });

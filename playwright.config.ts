@@ -47,23 +47,30 @@ export default defineConfig({
   },
 
   /* Configure projects for major browsers */
-  projects: [
-    {
-      name: 'chromium',
-      use: { browserName:'chromium' },
-    },
+  projects: process.env.CI
+    ? [
+        {
+          name: 'chromium',
+          use: { browserName: 'chromium' },
+        },
+      ]
+    : [
+        {
+          name: 'chromium',
+          use: { browserName: 'chromium' },
+        },
 
-    {
-      name: 'firefox',
-      use: { browserName: 'firefox' },
-    },
+        {
+          name: 'firefox',
+          use: { browserName: 'firefox' },
+        },
 
-    {
-      name: 'webkit',
-      use: { browserName: 'webkit' },
-    },
-
-    /* Test against mobile viewports. */
+        {
+          name: 'webkit',
+          use: { browserName: 'webkit' },
+        },
+      ],
+  /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',
     //   use: { ...devices['Pixel 5'] },
@@ -82,8 +89,6 @@ export default defineConfig({
     //   name: 'Google Chrome',
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
-  ],
-
   /* Run your local dev server before starting the tests */
   // webServer: {
   //   command: 'npm run start',
