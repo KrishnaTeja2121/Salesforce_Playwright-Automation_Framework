@@ -28,7 +28,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Smoke Tests
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && secrets.SF_BASE_URL != '' && secrets.SF_USERNAME != '' && secrets.SF_PASSWORD != '' && secrets.SF_SECURITY_TOKEN != '' && secrets.SF_CLIENT_ID != '' && secrets.SF_CLIENT_SECRET != ''
         run: npm run test:smoke
         env:
           SF_BASE_URL: ${{ secrets.SF_BASE_URL }}
@@ -39,7 +39,7 @@ jobs:
           SF_CLIENT_SECRET: ${{ secrets.SF_CLIENT_SECRET }}
 
       - name: Run Regression Tests
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && secrets.SF_BASE_URL != '' && secrets.SF_USERNAME != '' && secrets.SF_PASSWORD != '' && secrets.SF_SECURITY_TOKEN != '' && secrets.SF_CLIENT_ID != '' && secrets.SF_CLIENT_SECRET != ''
         run: npm run test:regression
         env:
           SF_BASE_URL: ${{ secrets.SF_BASE_URL }}
@@ -51,6 +51,10 @@ jobs:
           SF_STD_USERNAME: ${{ secrets.SF_STD_USERNAME }}
           SF_STD_PASSWORD: ${{ secrets.SF_STD_PASSWORD }}
           SF_STD_TOKEN: ${{ secrets.SF_STD_TOKEN }}
+
+      - name: Skip Salesforce Tests (missing secrets)
+        if: secrets.SF_BASE_URL == '' || secrets.SF_USERNAME == '' || secrets.SF_PASSWORD == '' || secrets.SF_SECURITY_TOKEN == '' || secrets.SF_CLIENT_ID == '' || secrets.SF_CLIENT_SECRET == ''
+        run: echo "Skipping Salesforce tests because one or more required SF_* secrets are missing."
 
       - name: Upload Playwright Report
         if: always()
