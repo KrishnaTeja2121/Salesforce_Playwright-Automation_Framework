@@ -34,6 +34,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
@@ -41,13 +47,21 @@ jobs:
         if: github.event_name == 'pull_request' && env.SF_BASE_URL != '' && env.SF_USERNAME != '' && env.SF_PASSWORD != '' && env.SF_SECURITY_TOKEN != '' && env.SF_CLIENT_ID != '' && env.SF_CLIENT_SECRET != ''
         run: npm run test:smoke
 
-      - name: Run Regression Tests
+      - name: Run API and E2E Regression Tests
         if: github.event_name != 'pull_request' && env.SF_BASE_URL != '' && env.SF_USERNAME != '' && env.SF_PASSWORD != '' && env.SF_SECURITY_TOKEN != '' && env.SF_CLIENT_ID != '' && env.SF_CLIENT_SECRET != ''
-        run: npm run test:regression
+        run: npx playwright test tests/api tests/e2e
+
+      - name: Run Security Regression Tests
+        if: github.event_name != 'pull_request' && env.SF_BASE_URL != '' && env.SF_USERNAME != '' && env.SF_PASSWORD != '' && env.SF_SECURITY_TOKEN != '' && env.SF_CLIENT_ID != '' && env.SF_CLIENT_SECRET != '' && env.SF_STD_USERNAME != '' && env.SF_STD_PASSWORD != '' && env.SF_STD_TOKEN != ''
+        run: npx playwright test tests/security
 
       - name: Skip Salesforce Tests (missing secrets)
         if: env.SF_BASE_URL == '' || env.SF_USERNAME == '' || env.SF_PASSWORD == '' || env.SF_SECURITY_TOKEN == '' || env.SF_CLIENT_ID == '' || env.SF_CLIENT_SECRET == ''
         run: echo "Skipping Salesforce tests because one or more required SF_* secrets are missing."
+
+      - name: Skip Security Regression Tests (missing standard-user secrets)
+        if: github.event_name != 'pull_request' && env.SF_BASE_URL != '' && env.SF_USERNAME != '' && env.SF_PASSWORD != '' && env.SF_SECURITY_TOKEN != '' && env.SF_CLIENT_ID != '' && env.SF_CLIENT_SECRET != '' && (env.SF_STD_USERNAME == '' || env.SF_STD_PASSWORD == '' || env.SF_STD_TOKEN == '')
+        run: echo "Skipping Salesforce security tests because one or more SF_STD_* secrets are missing."
 
       - name: Upload Playwright Report
         if: always()

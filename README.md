@@ -1,150 +1,128 @@
+# Salesforce QA Automation Framework
+
 ![Playwright](https://img.shields.io/badge/Playwright-Test-green)
 ![CI](https://img.shields.io/badge/CI-GitHub_Actions-blue)
 ![Salesforce](https://img.shields.io/badge/Salesforce-Automation-blue)
 
+Playwright + TypeScript test automation for Salesforce Sales Cloud. The project covers UI smoke checks, API validation, end-to-end business flows, and security scenarios, with GitHub Actions for CI execution.
 
+## What This Project Tests
 
-Salesforce QA Automation Framework
+- Smoke UI: authenticated Lightning home page access
+- API: Lead create, query, update, and delete through Salesforce REST APIs
+- E2E: Lead creation, UI conversion, and Opportunity validation
+- Security:
+  - field-level visibility checks for a standard user
+  - object permission enforcement for Lead deletion
 
-Playwright + TypeScript | UI + API + E2E | CI/CD Ready
+## Project Structure
 
-🚀 Overview
+```text
+.github/workflows/   CI pipeline
+docs/                Test strategy and governance notes
+src/auth/            Salesforce UI session setup
+src/api/             OAuth, REST client, SOQL helpers, API types
+src/core/            Environment loading and shared page abstractions
+src/flows/           Business flow orchestration
+src/security/        Standard-user context helpers
+src/ui/              Salesforce page objects
+tests/smoke/         Pull request smoke coverage
+tests/api/           API regression coverage
+tests/e2e/           Business-critical flow coverage
+tests/security/      Permission and security checks
+```
 
-This repository demonstrates a production-grade Salesforce QA Automation framework designed for  enterprise implementations across Sales Cloud, Service Cloud, and integrations.
+## Local Setup
 
-The framework is built using Playwright with TypeScript and follows API-first, business-driven test automation principles, aligned with Salesforce release cycles, DevOps practices, and quality governance standards.
+1. Install dependencies:
 
+```bash
+npm ci
+```
 
-🎯 Key Objectives
+2. Create a local env file:
 
-Ensure high-quality, scalable Salesforce implementations
+```bash
+cp .env.example .env
+```
 
-Reduce regression risk during frequent Salesforce releases
+3. Populate `.env` with Salesforce credentials for the org you want to test.
 
-Validate business outcomes, not just UI behavior
+Required admin/API variables:
 
-Support CI/CD-driven continuous quality
+```env
+SF_BASE_URL=https://your-domain.my.salesforce.com
+SF_USERNAME=your-admin-username@example.com
+SF_PASSWORD=your-admin-password
+SF_SECURITY_TOKEN=your-admin-security-token
+SF_CLIENT_ID=your-connected-app-client-id
+SF_CLIENT_SECRET=your-connected-app-client-secret
+```
 
-Act as a release quality gate, not just a reporting tool
+Required standard-user variables for security tests:
 
-🧱 Architecture & Design Principles
-Test Pyramid (Salesforce-Optimized)
+```env
+SF_STD_USERNAME=your-standard-username@example.com
+SF_STD_PASSWORD=your-standard-password
+SF_STD_TOKEN=your-standard-security-token
+```
 
-        End-to-End Business Flows
-        (Few, High-Value Scenarios)
-       ───────────────────────────
-      API & Integration Tests
-     (Fast, Stable, Broad Coverage)
-    ───────────────────────────────
-     UI Automation (LWC)
-    (Critical User Journeys Only)
+## Running Tests
 
+Run static checks:
 
+```bash
+npm run lint
+npm run typecheck
+```
 
+Run the smoke suite:
 
-Core Principles
+```bash
+npm run test:smoke
+```
 
-API-first testing to reduce UI dependency and flakiness
+Run API, E2E, and security regression:
 
-UI automation only where business value exists
+```bash
+npm run test:regression
+```
 
-Hybrid API + UI flows for end-to-end confidence
+Run everything:
 
-Security & data integrity validation across layers
+```bash
+npm run test:all
+```
 
-CI/CD-ready execution with clear quality gates
+Generate a local authenticated Playwright storage state:
 
-🧪 Test Coverage
-Salesforce UI Automation (Playwright), Sales Cloud, Lead creation & conversion, Lightning Web Components (LWC), Salesforce API & Integration Testing
+```bash
+npm run auth:sf
+```
 
-OAuth-based Salesforce authentication
+## Environment Behavior
 
-REST API CRUD operations
+- If Salesforce UI credentials are missing, global UI login setup is skipped.
+- If `SF_BASE_URL` is missing, smoke tests skip instead of failing on invalid relative URLs.
+- Security tests only run when the standard-user credentials are configured.
+- API and E2E tests require the admin/API credentials and connected app secrets.
 
-SOQL-based backend validation
+## CI Pipeline
 
-Negative permission scenarios
+GitHub Actions runs:
 
-Integration-style validation patterns
+- `npm ci`
+- `npm run lint`
+- `npm run typecheck`
+- Playwright browser install
+- PR smoke tests when core Salesforce secrets exist
+- push/scheduled API and E2E regression when core Salesforce secrets exist
+- push/scheduled security regression only when `SF_STD_*` secrets also exist
 
-End-to-End Business Flows
+Playwright HTML reports are uploaded as workflow artifacts.
 
-Example:
+## Notes
 
-API → Create Lead
-        ↓
-UI → Convert Lead
-        ↓
-Salesforce Flow → Auto-create Opportunity
-        ↓
-API → Validate Opportunity
-
-
-⚙️ CI/CD & DevOps Integration
-Pipeline Strategy, Pull Requests, Smoke tests only, GitHub Actions
-
-Playwright HTML reports with: Screenshots, Videos, Traces
-
-
-## 📁 Project Structure
-
-- **docs/** — Test strategy & governance
-- **src/**
-  - **core/** — Framework foundations
-  - **auth/** — Salesforce session handling
-  - **api/** — Salesforce REST & SOQL layer
-  - **ui/** — Page Objects (Salesforce Clouds)
-  - **flows/** — Business flow orchestration
-  - **security/** — Profile & FLS validation
-- **tests/**
-  - **smoke/** — Release-entry tests
-  - **api/** — API regression
-  - **e2e/** — Business-critical flows
-  - **security/** — Governance tests
-- **.github/workflows/** — CI/CD pipelines
-
-
-
-This structure mirrors enterprise Salesforce programs, not toy projects.
-
-🔑 Authentication Strategy
-
-UI-based login once
-
-Persisted session using Playwright storageState
-
-Eliminates repeated logins
-
-Improves stability and execution speed
-
-Enables seamless UI + API hybrid testing
-
-
-
-📊 Quality Governance
-
-Tracked and enforced through CI:
-
-Smoke vs Regression separation
-
-Pass/fail trends
-
-Flaky test detection (via retries + traces)
-
-Release confidence indicators
-
-
-
-🏆 Who This Is For
-
-Salesforce QA Automation Engineers
-
-Senior SDETs working on Salesforce
-
-QA Technical Consultants
-
-Enterprise Salesforce programs with:
-
-Frequent releases
-
-Complex integrations
+- Test data is generated uniquely per run to reduce collisions.
+- Cleanup is built into API, E2E, and object-permission flows where possible.
+- The project assumes the target Salesforce org is configured with the expected Lead and Opportunity business flow and standard-user permissions.

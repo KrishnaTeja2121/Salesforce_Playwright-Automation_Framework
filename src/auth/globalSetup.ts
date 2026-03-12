@@ -1,21 +1,14 @@
-import type { FullConfig } from '@playwright/test';
-import { chromium } from '@playwright/test';
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
+import { chromium, type FullConfig } from '@playwright/test';
+import { getOptionalUiEnv } from '../core/env';
 
 const STORAGE_STATE = path.resolve(__dirname, 'storageState.json');
 
-function hasUiAuthEnv(): boolean {
-  return Boolean(
-    process.env.SF_BASE_URL &&
-      process.env.SF_USERNAME &&
-      process.env.SF_PASSWORD &&
-      process.env.SF_SECURITY_TOKEN
-  );
-}
-
-async function globalSetup(_config: FullConfig) {
-  if (!hasUiAuthEnv()) {
+async function globalSetup(config: FullConfig) {
+  void config;
+  const env = getOptionalUiEnv();
+  if (!env) {
     fs.writeFileSync(STORAGE_STATE, JSON.stringify({ cookies: [], origins: [] }), 'utf8');
     console.warn('Skipping Salesforce UI login in global setup: required env vars are missing.');
     return;
@@ -26,9 +19,9 @@ async function globalSetup(_config: FullConfig) {
   const page = await context.newPage();
 
   try {
-    await page.goto(process.env.SF_BASE_URL!);
-    await page.fill('#username', process.env.SF_USERNAME!);
-    await page.fill('#password', `${process.env.SF_PASSWORD!}${process.env.SF_SECURITY_TOKEN!}`);
+    await page.goto(env.baseUrl);
+    await page.fill('#username', env.username);
+    await page.fill('#password', `${env.password}${env.securityToken}`);
     await page.click('#Login');
     await page.waitForURL(/lightning/);
     await page.waitForLoadState('networkidle');

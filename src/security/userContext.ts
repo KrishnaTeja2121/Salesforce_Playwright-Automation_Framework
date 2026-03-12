@@ -1,23 +1,19 @@
-export interface SalesforceUser{
-     username: string;
+import { getStandardUserEnv } from '../core/env';
+
+export interface SalesforceUser {
+  username: string;
   password: string;
   securityToken: string;
-  profile: 'ADMIN' | 'STANDARD';
-
+  profile: 'STANDARD';
 }
 
-export const users={
-    admin:{
-         username: process.env.SF_ADMIN_USERNAME!,
-    password: process.env.SF_ADMIN_PASSWORD!,
-    securityToken: process.env.SF_ADMIN_TOKEN!,
-    profile: 'ADMIN',
+export function getStandardUser(): SalesforceUser {
+  const env = getStandardUserEnv();
 
-    },
-     standard: {
-    username: process.env.SF_STD_USERNAME!,
-    password: process.env.SF_STD_PASSWORD!,
-    securityToken: process.env.SF_STD_TOKEN!,
+  return {
+    username: env.username,
+    password: env.password,
+    securityToken: env.securityToken,
     profile: 'STANDARD',
-  },
-};
+  };
+}

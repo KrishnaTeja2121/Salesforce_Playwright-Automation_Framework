@@ -1,6 +1,5 @@
-export const soql={
-    leadByEmail:(email:string)=>
+export const soql = {
+    leadByEmail: (email: string) =>
         `SELECT Id, FirstName, LastName, Company, Status
-    FROM Lead WHERE Email=${email}`,
-
+    FROM Lead WHERE Email='${email.replace(/'/g, "\\'")}'`,
 };

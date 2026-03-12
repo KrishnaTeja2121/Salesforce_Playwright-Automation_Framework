@@ -1,5 +1,10 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import { getSalesforceAccessToken } from './salesforceAuth.api';
+import type {
+    SalesforceCreateResponse,
+    SalesforceLeadPayload,
+    SalesforceQueryResponse,
+} from './types';
 
 export class SalesforceApiClient {
     private client!: AxiosInstance;
@@ -15,21 +20,27 @@ export class SalesforceApiClient {
         });
     }
 
-    async createLead(payload:any){
-        return this.client.post('/sobjects/Lead',payload);
+    async createLead(payload: SalesforceLeadPayload): Promise<AxiosResponse<SalesforceCreateResponse>> {
+        return this.client.post<SalesforceCreateResponse>('/sobjects/Lead', payload);
     }
 
-    async getLead(id:string){
+    async getLead(id: string): Promise<AxiosResponse> {
         return this.client.get(`/sobjects/Lead/${id}`);
     }
 
-    async updateLead(id:string, payload:any){
-        return this.client.patch(`/sobjects/Lead/${id}`,payload);
+    async updateLead(id: string, payload: Partial<SalesforceLeadPayload>): Promise<AxiosResponse> {
+        return this.client.patch(`/sobjects/Lead/${id}`, payload);
     }
-    async deleteLead(id:string){
+
+    async deleteLead(id: string): Promise<AxiosResponse> {
         return this.client.delete(`/sobjects/Lead/${id}`);
     }
-    async query(soql:string){
-        return this.client.get(`/query?q=${encodeURIComponent(soql)}`);
+
+    async deleteOpportunity(id: string): Promise<AxiosResponse> {
+        return this.client.delete(`/sobjects/Opportunity/${id}`);
+    }
+
+    async query<TRecord>(soql: string): Promise<AxiosResponse<SalesforceQueryResponse<TRecord>>> {
+        return this.client.get<SalesforceQueryResponse<TRecord>>(`/query?q=${encodeURIComponent(soql)}`);
     }
 }

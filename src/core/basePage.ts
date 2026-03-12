@@ -1,17 +1,17 @@
-import { Page } from "@playwright/test";
+import { Page } from '@playwright/test';
 
 export abstract class BasePage {
-    protected page: Page;
+    protected readonly page: Page;
 
     constructor(page: Page) {
         this.page = page;
     }
 
-    async naviagate(path:string){
+    async navigate(path: string) {
         await this.page.goto(path);
     }
 
-    async waitForLightning(){
+    async waitForLightning() {
         await this.page.waitForLoadState('networkidle');
     }
 }
